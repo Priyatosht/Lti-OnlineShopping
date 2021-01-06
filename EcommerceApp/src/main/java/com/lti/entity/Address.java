@@ -13,7 +13,6 @@ public class Address {
 	@Id
 	@GeneratedValue
 	int addressId;
-	
 	String houseNo;
 	String street;
 	String city;
