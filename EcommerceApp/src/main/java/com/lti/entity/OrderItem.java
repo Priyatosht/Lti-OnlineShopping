@@ -2,17 +2,22 @@ package com.lti.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "tbl_orderItem")
 public class OrderItem {
 	
 	@Id
-	@GeneratedValue
-	int orderItemId;
+	@SequenceGenerator(name = "seq_orderItem", initialValue = 401, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_orderItem")
+	long orderItemId;
 	int quantity;
 	
 	@OneToOne
@@ -22,16 +27,12 @@ public class OrderItem {
 	@ManyToOne
 	@JoinColumn(name="order_Id")
 	Order order;
-	
-	@ManyToOne
-	@JoinColumn(name="cart_Id")
-	Cart cart;
 
-	public int getOrderItemId() {
+	public long getOrderItemId() {
 		return orderItemId;
 	}
 
-	public void setOrderItemId(int orderItemId) {
+	public void setOrderItemId(long orderItemId) {
 		this.orderItemId = orderItemId;
 	}
 
@@ -58,15 +59,7 @@ public class OrderItem {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-	
 	
 
+	
 }

@@ -1,5 +1,43 @@
 package com.lti.repository;
 
-public interface EcommerceRepository {
+import java.util.List;
 
+import com.lti.entity.Admin;
+import com.lti.entity.Customer;
+import com.lti.entity.Order;
+import com.lti.entity.OrderItem;
+import com.lti.entity.Product;
+import com.lti.entity.Retailer;
+
+public interface EcommerceRepository {
+	public Admin addAnAdmin(Admin admin);
+	
+	public Customer addACustomer(Customer customer);
+	public Customer updateACustomer(Customer customer);
+	public Customer findCustomerById(long customerId);
+	public List<Customer> viewAllCustomers();
+	public boolean authenticateWithEmailAndPassword(String email, String password);
+	public boolean updatePasswordwithEmail(String email,String pwd);
+
+	
+	public Product addOrUpdateProduct(Product product);
+    public Product findProductById(long productId);
+    public List<Product> viewAllProducts();
+    public Product updateStockOfProduct(long ProductId,int stock);
+    public void removeProduct(long ProductId);
+    
+    
+	public Retailer addOrUpdateRetailer(Retailer retailer);
+	public Retailer findRetailerById(long retailerId);
+	public List<Retailer> viewAllRetailers();  
+	public int revenueGeneratedByRetailer(long retailerId);
+	public List<Product> displayRetailerProducts(long retailerId);
+	
+	public Order addorUpdateOrder(Order order);
+	public Order findOrderById(long orderId );
+	public List<Order> viewAllOrders();
+	
+	public OrderItem addOrUpdateOrderItem(OrderItem orderItem);
+	public OrderItem findOrderItemById(long orderItemId);
+	public List<OrderItem> viewAllOrderItems();	
 }
