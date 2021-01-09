@@ -2,38 +2,35 @@ package com.lti.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "tbl_admin")
 public class Admin {
 	
 	@Id
-	@GeneratedValue
-	int customerId;
-	String customerName;
-	String mobileNumber;
+	@SequenceGenerator(name = "seq_admin1", initialValue = 201, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_admin1")
+	long adminId;
+	String adminName;
 	String emailId;
-	int age;
-	String gender;
 	String password;
-	boolean approved;
-	public int getCustomerId() {
-		return customerId;
+	
+	
+	public long getAdminId() {
+		return adminId;
 	}
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setAdminId(long adminId) {
+		this.adminId = adminId;
 	}
-	public String getCustomerName() {
-		return customerName;
+	public String getAdminName() {
+		return adminName;
 	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
-	public String getMobileNumber() {
-		return mobileNumber;
-	}
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
 	}
 	public String getEmailId() {
 		return emailId;
@@ -41,31 +38,12 @@ public class Admin {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public boolean isApproved() {
-		return approved;
-	}
-	public void setApproved(boolean approved) {
-		this.approved = approved;
-	}
 	
 	
-
 }

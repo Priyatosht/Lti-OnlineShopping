@@ -2,37 +2,41 @@ package com.lti.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "tbl_retailer")
 public class Retailer {
 	
 	@Id
-	@GeneratedValue
-	int retailerId;
+	@SequenceGenerator(name = "seq_retailer", initialValue = 601, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_retailer")
+	long retailerId;
 	String retailerName;
 	String mobileNumber;
 	String emailId;
-	int age;
-	String gender;
 	String password;
 	boolean approved;
 	
 	
-	@OneToMany(mappedBy = "retailer")
+	@OneToMany(mappedBy = "retailer", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	List<Product> product;
 
 
-	public int getRetailerId() {
+	public long getRetailerId() {
 		return retailerId;
 	}
 
 
-	public void setRetailerId(int retailerId) {
+	public void setRetailerId(long retailerId) {
 		this.retailerId = retailerId;
 	}
 
@@ -67,26 +71,6 @@ public class Retailer {
 	}
 
 
-	public int getAge() {
-		return age;
-	}
-
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-
-	public String getGender() {
-		return gender;
-	}
-
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-
 	public String getPassword() {
 		return password;
 	}
@@ -115,7 +99,7 @@ public class Retailer {
 	public void setProduct(List<Product> product) {
 		this.product = product;
 	}
-	
-	
 
+
+	
 }
