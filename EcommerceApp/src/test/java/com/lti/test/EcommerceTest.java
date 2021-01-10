@@ -33,13 +33,13 @@ public class EcommerceTest {
 	@Test
 	public void addACustomer() {
 		Customer customer=new Customer();
-		customer.setCustomerName("Priyatosh");
+		customer.setCustomerName("Prajwal");
 		customer.setAge(21);
 		customer.setEmailId("priyat@gmail.com");
 		customer.setGender("male");
-		customer.setMobileNumber("45632789");
-		customer.setPassword("2345");
-		customer.setAddress("Hyderabad");
+		customer.setMobileNumber("45222789");
+		customer.setPassword("234225");
+		customer.setAddress("Bangalore");
 		customer.setApproved(false);
 		erepo.addACustomer(customer);
 	}
@@ -72,7 +72,7 @@ public class EcommerceTest {
 	@Test
 	public void addOrUpdateProduct() {
 		Product product=new Product();
-		product.setProductName("Reebok Shoes");
+		product.setProductName("Nike Air ");
 		product.setProductPrice(1234);
 		product.setProductImg("dfgshd");
 		product.setBrand("Rbk");
@@ -158,8 +158,14 @@ public class EcommerceTest {
 	
 	@Test
 	public void addOrUpdateOrder() {
-		Order order=new Order();
-		erepo.addorUpdateOrder(order);
+		//Order order=new Order();
+//		Order order = erepo.findOrderById(orderId);
+//		Customer customer = erepo.findCustomerById(customerId);
+//		List<Order> orders = customer.getOrder(); 
+//		orders.add(order);
+//		customer.setOrder(orders);
+//		order.setCustomer(customer);
+//		erepo.addorUpdateOrder(order);
 	}
 	
 	@Test
@@ -196,5 +202,67 @@ public class EcommerceTest {
 		OrderItem oi=erepo.findOrderItemById(401);
 		System.out.println(oi.getOrderItemId());
 	}
+	
+	//-------------------------------------------
+	
+	@Test
+	public void viewAllProductByCategoryName( ) {
+		List<Product> products= erepo.viewAllProductByCategoryName("Shoes");
+		for(Product prod : products) {
+			System.out.println(prod.getProductName()+ prod.getProductPrice());
+		}
+	}
+	
+	@Test
+	public void viewProductByProductName() {
+		List<Product> products = erepo.viewProductsByProductName("Reebok Shoes");
+		for(Product prod : products) {
+		System.out.println(prod.getProductId() + prod.getDescriptionText());
+		}
+		
+	}
+	
+	@Test
+	public void filterByProductName() {
+		List<Product> products = erepo.viewProductsByProductName("Reebok Shoes");
+		for(Product prod : products) {
+		System.out.println(prod.getProductId() + prod.getProductPrice());
+		}
+		
+	}
 
+	@Test
+	public void filterByPriceAndCategoryName() {
+		List<Product> products = erepo.filterByPriceAndCategoryName(1000, 1300, "Shoes");
+		for(Product prod : products) {
+			System.out.println(prod.getProductName() + prod.getProductPrice());
+			}
+	}
+	
+	@Test
+	public void filterByBrand() {
+		List<Product> products = erepo.filterByBrand("Rbk");
+		for(Product prod : products) {
+		System.out.println(prod.getProductName());
+		}
+		
+	}
+	
+	@Test
+	public void filterByProductPrice(){
+		List<Product> products = erepo.filterByProductPrice(1000, 1300);
+		for(Product prod : products) {
+			System.out.println(prod.getProductName());
+			}
+	}
+	
+//	@Test
+//	public void viewCustomerOrderHistory() {
+//		List<Order> orders = erepo.viewCustomerOrderHistory(5022);
+//		for(Order ord : orders) {
+//			System.out.println(ord.get);
+//			}
+//		}
+	
+	
 }

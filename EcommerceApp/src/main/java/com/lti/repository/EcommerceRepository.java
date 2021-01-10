@@ -40,4 +40,13 @@ public interface EcommerceRepository {
 	public OrderItem addOrUpdateOrderItem(OrderItem orderItem);
 	public OrderItem findOrderItemById(long orderItemId);
 	public List<OrderItem> viewAllOrderItems();	
+	
+	
+	public List<Product> viewAllProductByCategoryName(String category);
+	public List<Product> viewProductsByProductName(String productName);
+	public List<Product> filterByProductName(String productName);
+	public List<Product> filterByPriceAndCategoryName(double minPrice, double maxPrice , String categoryName);
+	public List<Product> filterByBrand(String brand);
+	public List<Product> filterByProductPrice(double minPrice, double maxPrice);
+	//public List<Order> viewCustomerOrderHistory(long customerId);
 }
