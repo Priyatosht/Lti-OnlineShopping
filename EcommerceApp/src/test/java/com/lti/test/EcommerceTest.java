@@ -2,6 +2,7 @@ package com.lti.test;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.lti.dto.Cart;
 import com.lti.entity.Admin;
 import com.lti.entity.Customer;
 import com.lti.entity.Order;
@@ -34,7 +36,7 @@ public class EcommerceTest {
 	public void addACustomer() {
 		Customer customer=new Customer();
 		customer.setCustomerName("Priyatosh");
-		customer.setAge(21);
+		customer.setDateOfBirth(LocalDate.now());;
 		customer.setEmailId("priyat@gmail.com");
 		customer.setGender("male");
 		customer.setMobileNumber("45632789");
@@ -121,12 +123,27 @@ public class EcommerceTest {
 	@Test
 	public void addOrUpdateRetailer() {
 		Retailer retailer=new Retailer();
-		retailer.setRetailerName("Kishan");
-		retailer.setPassword("7990");
-		retailer.setEmailId("kish@123.com");
-		retailer.setMobileNumber("1239838798");
+		retailer.setRetailerName("Naveen");
+		retailer.setPassword("54267");
+		retailer.setEmailId("Naveen@123.com");
+		retailer.setMobileNumber("8724982932");
 		retailer.setApproved(false);
 		erepo.addOrUpdateRetailer(retailer);
+	}
+	
+	@Test
+	public void addProductByRetailer() {
+		Retailer retailer=erepo.findRetailerById(621);
+		Product product=new Product();
+		product.setProductName("Puma Shoes");
+		product.setProductPrice(3000);
+		product.setProductImg("znbxcnz");
+		product.setBrand("Puma");
+		product.setStock(20);
+		product.setApproved(false);
+		product.setCategoryName("Shoes");
+		product.setDescriptionText("Stylish shoes");
+		erepo.addProductByRetailer(retailer, product);
 	}
 	
 	@Test
@@ -196,5 +213,27 @@ public class EcommerceTest {
 		OrderItem oi=erepo.findOrderItemById(401);
 		System.out.println(oi.getOrderItemId());
 	}
+	
+	@Test
+	public void createCart() {
+		erepo.createCart(101);
+		Cart cart= erepo.getCart();
+		erepo.addToCart(521);
+		erepo.addToCart(522);
+		System.out.println(cart.getCustomerId());
+		List<Product> products=cart.getProducts();
+		List<Integer> quantity=cart.getQuantity();
+		erepo.increaseProductQuantityinCart(erepo.findProductById(521), 10);
+		erepo.increaseProductQuantityinCart(erepo.findProductById(522), 10);
+		erepo.addIntoOrderAndOrderItemByCart(cart);
+		System.out.println(erepo.calculateTotalPrice(cart.getProducts(), cart.getQuantity()));
+		int i=-1;
+		for(Product p:products) {
+			i=i+1;
+			System.out.println(p.getProductId()+" "+quantity.get(i));
+		}
+	}
+	
+
 
 }

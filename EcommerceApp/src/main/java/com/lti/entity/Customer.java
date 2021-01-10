@@ -1,5 +1,6 @@
 package com.lti.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,7 +27,8 @@ public class Customer {
 	String customerName;
 	String mobileNumber;
 	String emailId;
-	int age;
+//	int age;
+	LocalDate dateOfBirth;
 	String gender;
 	String password;
 	String address;
@@ -77,13 +79,13 @@ public class Customer {
 	}
 
 
-	public int getAge() {
-		return age;
+	public LocalDate getDateOfBirth() {
+		return dateOfBirth;
 	}
 
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 

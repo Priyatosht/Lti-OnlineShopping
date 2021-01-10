@@ -1,5 +1,6 @@
 package com.lti.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ public class Order {
 	@SequenceGenerator(name = "seq_order", initialValue = 301, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_order")
 	long orderId;
+	LocalDate orderDate;
 	
 	@ManyToOne
 	@JoinColumn(name="customer_Id")
@@ -39,6 +41,16 @@ public class Order {
 
 	public void setOrderId(long orderId) {
 		this.orderId = orderId;
+	}
+     
+	
+	public LocalDate getOrderDate() {
+		return orderDate;
+	}
+
+
+	public void setOrderDate(LocalDate orderDate) {
+		this.orderDate = orderDate;
 	}
 
 

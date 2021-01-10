@@ -2,6 +2,7 @@ package com.lti.repository;
 
 import java.util.List;
 
+import com.lti.dto.Cart;
 import com.lti.entity.Admin;
 import com.lti.entity.Customer;
 import com.lti.entity.Order;
@@ -30,8 +31,9 @@ public interface EcommerceRepository {
 	public Retailer addOrUpdateRetailer(Retailer retailer);
 	public Retailer findRetailerById(long retailerId);
 	public List<Retailer> viewAllRetailers();  
-	public int revenueGeneratedByRetailer(long retailerId);
+	public double revenueGeneratedByRetailer(long retailerId);
 	public List<Product> displayRetailerProducts(long retailerId);
+	public Product addProductByRetailer(Retailer retailer,Product product);
 	
 	public Order addorUpdateOrder(Order order);
 	public Order findOrderById(long orderId );
@@ -40,4 +42,16 @@ public interface EcommerceRepository {
 	public OrderItem addOrUpdateOrderItem(OrderItem orderItem);
 	public OrderItem findOrderItemById(long orderItemId);
 	public List<OrderItem> viewAllOrderItems();	
+	
+	
+	public Cart getCart();
+	public void setCart(Cart cart);
+	public void createCart(long customerId);
+	public void addToCart(long productId);
+	public int searchProductinCart(Product product);
+	public void increaseProductQuantityinCart(Product product,int quantity);
+	public double calculateProductPriceWithQuantityinCart(Product product,int quantity);
+	public double calculateTotalPrice(List<Product> products,List<Integer> quantity);
+	public void addIntoOrderAndOrderItemByCart(Cart cart);
+//	public void addIntoOrderItemByCart(Cart cart);
 }
