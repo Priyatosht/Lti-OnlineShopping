@@ -1,5 +1,7 @@
 package com.lti.repository;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +11,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lti.dto.Cart;
 import com.lti.entity.Admin;
 import com.lti.entity.Customer;
 import com.lti.entity.Order;
@@ -19,8 +22,21 @@ import com.lti.entity.Retailer;
 @Component
 public class EcommerceRepositoryImpl implements EcommerceRepository {
 
+    
+	Cart cart;
+	
 	@PersistenceContext
 	EntityManager em;
+	
+	
+	
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	@Transactional
 	public Admin addAnAdmin(Admin admin) {
@@ -129,14 +145,16 @@ public class EcommerceRepositoryImpl implements EcommerceRepository {
 		return retailers;
 	}
 
-	public int revenueGeneratedByRetailer(long retailerId) {
-		String jpql = "Select p.productPrice,oi.quantity from  Product p join OrderItem oi on p.productId=oi.product.productId where p.retailer.retailerId=:retailerId";
+	
+	public double revenueGeneratedByRetailer(long retailerId) {
+		String jpql="Select p.productPrice,oi.quantity from  Product p join OrderItem oi on p.productId=oi.product.productId where p.retailer.retailerId=:retailerId";
 		Query query = em.createQuery(jpql);
-		query.setParameter("retailerId", retailerId);
-		List<Object[]> objects = query.getResultList();
-		int revenue = 0;
-		for (Object[] o : objects) {
-			revenue = revenue + ((Integer) o[0]) * ((Integer) o[1]);
+		query.setParameter("retailerId",retailerId);
+		List<Object[]> objects=query.getResultList();
+		double revenue=0;
+		for(Object[] o:objects) {
+		  revenue=revenue+((Double)o[0])*((Integer)o[1]);
+
 		}
 		return revenue;
 	}
@@ -149,6 +167,20 @@ public class EcommerceRepositoryImpl implements EcommerceRepository {
 		return products;
 	}
 
+	@Transactional
+	public Product addProductByRetailer(Retailer retailer,Product product) {
+		List<Product> products=retailer.getProduct();
+		if(products==null) {
+			products=new ArrayList<Product>();
+		}
+		products.add(product);
+		product.setRetailer(retailer);
+		retailer.setProduct(products);
+		Product product2= em.merge(product);
+		return product2;
+	}
+
+	
 	@Transactional
 	public Order addorUpdateOrder(Order order) {
 		Order order2 = em.merge(order);
@@ -183,6 +215,7 @@ public class EcommerceRepositoryImpl implements EcommerceRepository {
 		List<OrderItem> orderItems = query.getResultList();
 		return orderItems;
 	}
+
 
 	// -------------------------------------------------------------
 
@@ -246,4 +279,73 @@ public class EcommerceRepositoryImpl implements EcommerceRepository {
 //		List<Order> orders = query.getResultList();
 //		return orders;
 //	}
+
+	
+	public void createCart(long customerId) {
+	   cart=new Cart();
+       cart.setCustomerId(customerId);	
+       cart.setProducts(new ArrayList<Product>());
+       cart.setQuantity(new ArrayList<Integer>());
+	}
+	
+	public int searchProductinCart(Product product) {
+		List<Product> products=cart.getProducts();
+		int i=-1;
+		for(Product p:products)
+		{   i=i+1;
+			if(p.getProductId()==product.getProductId()) {
+				break;
+			}			
+		}
+		return i;
+	}
+	
+	public void increaseProductQuantityinCart(Product product,int quantity) {
+		int i=searchProductinCart(product);
+		List<Integer> quantity1= cart.getQuantity();
+		quantity1.set(i, quantity);
+		cart.setQuantity(quantity1);
+	}
+	
+	public void addToCart(long productId) {
+		Product product=em.find(Product.class, productId);
+		cart.getProducts().add(product);
+		cart.getQuantity().add(new Integer(1));		
+	}
+	public double calculateProductPriceWithQuantityinCart(Product product,int quantity) {
+		double price=product.getProductPrice()*quantity;
+		return price;
+	}
+	public double calculateTotalPrice(List<Product> products,List<Integer> quantity) {
+		double totalPrice=0;
+		int i=0;
+		for(Product p:products) {
+			totalPrice=totalPrice+calculateProductPriceWithQuantityinCart(p,(int)quantity.get(i));
+//			(p.getProductPrice()*quantity.get(i));
+			i=i+1;
+		}
+		return totalPrice;
+	}
+
+	@Transactional
+	public void addIntoOrderAndOrderItemByCart(Cart cart) {
+		Order order=new Order();
+		order.setCustomer(findCustomerById(cart.getCustomerId()));
+		List<OrderItem> oil=new ArrayList<OrderItem>();
+		List<Integer> quantity=cart.getQuantity();
+		int i=-1;
+        for(Product p:cart.getProducts()) {
+        	i=i+1;
+        	OrderItem oi=new OrderItem();
+        	oi.setProduct(p);
+        	oi.setQuantity(quantity.get(i));
+        	oi.setOrder(order);
+        	oil.add(oi);
+        }
+        order.setOrderItem(oil);
+        order.setOrderDate(LocalDate.now());
+		em.merge(order);
+	}
+
+
 }
